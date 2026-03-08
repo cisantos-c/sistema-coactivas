@@ -1,120 +1,128 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
+import {
+  FaBars,
+  FaHome,
+  FaUsers,
+  FaUserShield,
+  FaCog,
+  FaFileInvoice,
+  FaGavel,
+  FaChartBar
+} from "react-icons/fa";
 
 export default function Sidebar() {
 
-  const [adminOpen, setAdminOpen] = useState(false);
-  const [configOpen, setConfigOpen] = useState(false);
-  const [autosOpen, setAutosOpen] = useState(false);
-  const [embargosOpen, setEmbargosOpen] = useState(false);
-  const [reportesOpen, setReportesOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
+  const menu =
+    "flex items-center gap-3 p-3 rounded hover:bg-gray-700 transition";
+    
+  const active =
+    "bg-gray-700";
 
   return (
-    <div className="bg-gray-900 text-white w-64 h-screen fixed p-4 overflow-y-auto">
 
-      <h1 className="text-xl font-bold mb-6">
-        Sistema Coactivas
-      </h1>
+    <div
+      className={`bg-blue-900 text-white h-screen fixed transition-all duration-300 ${
+        collapsed ? "w-20" : "w-64"
+      }`}
+    >
 
-      <nav className="space-y-2">
+      {/* HEADER */}
 
-        <Link
+      <div className="flex items-center justify-between p-4 border-b border-gray-700">
+
+        {!collapsed && (
+          <h1 className="font-bold text-lg">
+            Coactivas
+          </h1>
+        )}
+
+        <FaBars
+          className="cursor-pointer"
+          onClick={() => setCollapsed(!collapsed)}
+        />
+
+      </div>
+
+      {/* MENU */}
+
+      <nav className="p-2 space-y-2">
+
+        <NavLink
           to="/"
-          className="block p-2 rounded hover:bg-gray-700"
+          className={({ isActive }) =>
+            `${menu} ${isActive ? active : ""}`
+          }
         >
-          Dashboard
-        </Link>
+          <FaHome />
+          {!collapsed && "Dashboard"}
+        </NavLink>
 
-        {/* ADMINISTRACION */}
-
-        <button
-          onClick={() => setAdminOpen(!adminOpen)}
-          className="w-full text-left p-2 rounded hover:bg-gray-700"
+        <NavLink
+          to="/usuarios"
+          className={({ isActive }) =>
+            `${menu} ${isActive ? active : ""}`
+          }
         >
-          Administración
-        </button>
+          <FaUsers />
+          {!collapsed && "Usuarios"}
+        </NavLink>
 
-        {adminOpen && (
-          <div className="ml-4 flex flex-col">
-            <Link to="/usuarios" className="p-1 hover:text-gray-300">
-              Usuarios
-            </Link>
-
-            <Link to="/roles" className="p-1 hover:text-gray-300">
-              Roles
-            </Link>
-          </div>
-        )}
-
-        {/* CONFIGURACIONES */}
-
-        <button
-          onClick={() => setConfigOpen(!configOpen)}
-          className="w-full text-left p-2 rounded hover:bg-gray-700"
+        <NavLink
+          to="/roles"
+          className={({ isActive }) =>
+            `${menu} ${isActive ? active : ""}`
+          }
         >
-          Configuraciones
-        </button>
+          <FaUserShield />
+          {!collapsed && "Roles"}
+        </NavLink>
 
-        {configOpen && (
-          <div className="ml-4 flex flex-col">
-            <Link to="/configuracion" className="p-1 hover:text-gray-300">
-              Configuración General
-            </Link>
-          </div>
-        )}
-
-        {/* AUTOS DE PAGO */}
-
-        <button
-          onClick={() => setAutosOpen(!autosOpen)}
-          className="w-full text-left p-2 rounded hover:bg-gray-700"
+        <NavLink
+          to="/configuracion"
+          className={({ isActive }) =>
+            `${menu} ${isActive ? active : ""}`
+          }
         >
-          Autos de Pago
-        </button>
+          <FaCog />
+          {!collapsed && "Configuraciones"}
+        </NavLink>
 
-        {autosOpen && (
-          <div className="ml-4 flex flex-col">
-            <Link to="/autospago" className="p-1 hover:text-gray-300">
-              Gestión de Autos
-            </Link>
-          </div>
-        )}
-
-        {/* EMBARGOS */}
-
-        <button
-          onClick={() => setEmbargosOpen(!embargosOpen)}
-          className="w-full text-left p-2 rounded hover:bg-gray-700"
+        <NavLink
+          to="/autospago"
+          className={({ isActive }) =>
+            `${menu} ${isActive ? active : ""}`
+          }
         >
-          Embargos
-        </button>
+          <FaFileInvoice />
+          {!collapsed && "Autos de Pago"}
+        </NavLink>
 
-        {embargosOpen && (
-          <div className="ml-4 flex flex-col">
-            <Link to="/embargos" className="p-1 hover:text-gray-300">
-              Gestión de Embargos
-            </Link>
-          </div>
-        )}
-
-        {/* REPORTES */}
-
-        <button
-          onClick={() => setReportesOpen(!reportesOpen)}
-          className="w-full text-left p-2 rounded hover:bg-gray-700"
+        <NavLink
+          to="/embargos"
+          className={({ isActive }) =>
+            `${menu} ${isActive ? active : ""}`
+          }
         >
-          Reportes
-        </button>
+          <FaGavel />
+          {!collapsed && "Embargos"}
+        </NavLink>
 
-        {reportesOpen && (
-          <div className="ml-4 flex flex-col">
-            <Link to="/reportes" className="p-1 hover:text-gray-300">
-              Reportes del Sistema
-            </Link>
-          </div>
-        )}
+        <NavLink
+          to="/reportes"
+          className={({ isActive }) =>
+            `${menu} ${isActive ? active : ""}`
+          }
+        >
+          <FaChartBar />
+          {!collapsed && "Reportes"}
+        </NavLink>
 
       </nav>
+
     </div>
   );
 }
