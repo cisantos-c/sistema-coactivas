@@ -21,13 +21,17 @@ function AppRouter() {
         <Route path="/deudores/nuevo" element={<PagePlaceholder title="Nuevo Deudor" />} />
         <Route path="/deudores" element={<PagePlaceholder title="Consultar Deudores" />} />
 
-        <Route path="/procesos/nuevo" element={<PagePlaceholder title="Nuevo Proceso" />} />
-        <Route path="/procesos" element={<PagePlaceholder title="Consultar Procesos" />} />
+        <Route path="/autos-pago/nuevo" element={<PagePlaceholder title="Nuevo Auto de Pago" />} />
+        <Route path="/autos-pago" element={<PagePlaceholder title="Listado de Autos de Pago" />} />
 
-        <Route path="/autos" element={<PagePlaceholder title="Autos de Pago" />} />
-        <Route path="/embargos" element={<PagePlaceholder title="Embargos" />} />
-        <Route path="/continuaciones" element={<PagePlaceholder title="Continuaciones" />} />
-        <Route path="/archivos" element={<PagePlaceholder title="Archivos de Causa" />} />
+        <Route path="/embargos/nuevo" element={<PagePlaceholder title="Nuevo Embargo" />} />
+        <Route path="/embargos" element={<PagePlaceholder title="Listado de Embargos" />} />
+
+        <Route path="/continuaciones/nuevo" element={<PagePlaceholder title="Nueva Continuación" />} />
+        <Route path="/continuaciones" element={<PagePlaceholder title="Listado de Continuaciones" />} />
+
+        <Route path="/archivos-causa/nuevo" element={<PagePlaceholder title="Nuevo Archivo de Causa" />} />
+        <Route path="/archivos-causa" element={<PagePlaceholder title="Listado de Archivos de Causa" />} />
 
         <Route path="/documentos/generar" element={<PagePlaceholder title="Generar Documentos" />} />
         <Route path="/documentos/subir" element={<PagePlaceholder title="Subir Documentos" />} />
@@ -41,6 +45,12 @@ function AppRouter() {
         <Route path="/admin/usuarios" element={<PagePlaceholder title="Usuarios" />} />
         <Route path="/admin/roles" element={<PagePlaceholder title="Roles" />} />
         <Route path="/admin/permisos" element={<PagePlaceholder title="Permisos" />} />
+
+        <Route path="/parametros/instituciones" element={<PagePlaceholder title="Instituciones" />} />
+        <Route path="/parametros/tipos-oficio" element={<PagePlaceholder title="Tipos de Oficio" />} />
+        <Route path="/parametros/medidas-cautelares" element={<PagePlaceholder title="Medidas Cautelares" />} />
+        <Route path="/parametros/reglas-oficios" element={<PagePlaceholder title="Reglas de Oficios por Medida" />} />
+
       </Route>
     </Routes>
   )

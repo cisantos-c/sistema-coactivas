@@ -11,7 +11,10 @@ import {
   FilePlus2,
   Upload,
   Settings,
-  KeyRound
+  KeyRound,
+  Building2,
+  Shield,
+  GitBranch
 } from "lucide-react"
 
 const menuConfig = [
@@ -32,18 +35,38 @@ const menuConfig = [
     title: "Procesos Coactivos",
     icon: Scale,
     submenu: [
-      { title: "Nuevo Proceso", path: "/procesos/nuevo", icon: PlusCircle },
-      { title: "Consultar Procesos", path: "/procesos", icon: Search }
-    ]
-  },
-  {
-    title: "Actuaciones Procesales",
-    icon: FileText,
-    submenu: [
-      { title: "Autos de Pago", path: "/autos", icon: FilePlus2 },
-      { title: "Embargos", path: "/embargos", icon: FilePlus2 },
-      { title: "Continuaciones", path: "/continuaciones", icon: FilePlus2 },
-      { title: "Archivos de Causa", path: "/archivos", icon: FolderOpen }
+      {
+        title: "Autos de Pago",
+        icon: FilePlus2,
+        submenu: [
+          { title: "Nuevo", path: "/autos-pago/nuevo", icon: PlusCircle },
+          { title: "Listado", path: "/autos-pago", icon: Search }
+        ]
+      },
+      {
+        title: "Embargos",
+        icon: FileText,
+        submenu: [
+          { title: "Nuevo", path: "/embargos/nuevo", icon: PlusCircle },
+          { title: "Listado", path: "/embargos", icon: Search }
+        ]
+      },
+      {
+        title: "Continuaciones",
+        icon: FileText,
+        submenu: [
+          { title: "Nuevo", path: "/continuaciones/nuevo", icon: PlusCircle },
+          { title: "Listado", path: "/continuaciones", icon: Search }
+        ]
+      },
+      {
+        title: "Archivos de Causa",
+        icon: FolderOpen,
+        submenu: [
+          { title: "Nuevo", path: "/archivos-causa/nuevo", icon: PlusCircle },
+          { title: "Listado", path: "/archivos-causa", icon: Search }
+        ]
+      }
     ]
   },
   {
@@ -64,14 +87,30 @@ const menuConfig = [
       { title: "Embargos", path: "/reportes/embargos", icon: BarChart3 },
       { title: "Deudores", path: "/reportes/deudores", icon: BarChart3 }
     ]
-  },
-  {
+    },
+    {
     title: "Administración",
     icon: ShieldCheck,
     submenu: [
-      { title: "Usuarios", path: "/admin/usuarios", icon: Users },
-      { title: "Roles", path: "/admin/roles", icon: Settings },
-      { title: "Permisos", path: "/admin/permisos", icon: KeyRound }
+      {
+        title: "Seguridad",
+        icon: Shield,
+        submenu: [
+          { title: "Usuarios", path: "/admin/usuarios", icon: Users },
+          { title: "Roles", path: "/admin/roles", icon: Settings },
+          { title: "Permisos", path: "/admin/permisos", icon: KeyRound }
+        ]
+      },
+      {
+        title: "Parámetros del Sistema",
+        icon: Settings,
+        submenu: [
+          { title: "Instituciones", path: "/parametros/instituciones", icon: Building2 },
+          { title: "Tipos de Oficio", path: "/parametros/tipos-oficio", icon: FileText },
+          { title: "Medidas Cautelares", path: "/parametros/medidas-cautelares", icon: Shield },
+          { title: "Reglas de Oficios por Medida", path: "/parametros/reglas-oficios", icon: GitBranch }
+        ]
+      }
     ]
   }
 ]

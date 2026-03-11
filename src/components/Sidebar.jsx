@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import {
   ChevronDown,
@@ -11,49 +11,113 @@ import menuConfig from "../config/menuConfig"
 function Sidebar() {
   const location = useLocation()
   const [collapsed, setCollapsed] = useState(false)
-  const [openMenus, setOpenMenus] = useState({
-    Deudores: false,
-    "Procesos Coactivos": false,
-    "Actuaciones Procesales": true,
-    Documentos: false,
-    Reportes: false,
-    Administración: false
-  })
+  const [openMenus, setOpenMenus] = useState({})
 
   const activePath = location.pathname
 
-  const activeParents = useMemo(() => {
-    const parents = {}
-    menuConfig.forEach((item) => {
-      if (item.submenu) {
-        parents[item.title] = item.submenu.some((sub) => sub.path === activePath)
-      }
-    })
-    return parents
-  }, [activePath])
-
-  const toggleMenu = (title) => {
+  const toggleMenu = (key) => {
     if (collapsed) return
     setOpenMenus((prev) => ({
       ...prev,
-      [title]: !prev[title]
+      [key]: !prev[key]
     }))
   }
 
-  const itemStyle = (active = false) => ({
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    textDecoration: "none",
-    color: active ? "#ffffff" : "#d8e6f3",
-    background: active ? "rgba(255,255,255,0.14)" : "transparent",
-    border: active ? "1px solid rgba(255,255,255,0.14)" : "1px solid transparent",
-    padding: collapsed ? "12px 10px" : "12px 14px",
-    borderRadius: "12px",
-    transition: "all 0.2s ease",
-    fontWeight: active ? 700 : 500,
-    minHeight: "46px"
-  })
+  const hasActiveChild = (item) => {
+    if (!item.submenu) return item.path === activePath
+    return item.submenu.some((sub) => hasActiveChild(sub))
+  }
+
+  const renderMenuItems = (items, level = 0, parentKey = "") => {
+    return items.map((item, index) => {
+      const key = `${parentKey}${level}-${index}-${item.title}`
+      const Icon = item.icon
+      const hasSubmenu = !!item.submenu
+      const isActive = item.path === activePath
+      const isParentActive = hasActiveChild(item)
+      const isOpen = !!openMenus[key] || isParentActive
+
+      if (!hasSubmenu) {
+        return (
+          <li key={key} style={{ marginBottom: "6px" }}>
+            <Link
+              to={item.path}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                textDecoration: "none",
+                //color: isActive ? "#ffffff" : "#d8e6f3",
+                //background: isActive ? "rgba(255,255,255,0.14)" : "transparent",
+                color: isActive ? "#ffffff" : "#E8F0FF",
+                background: isActive ? "rgba(255,255,255,0.18)" : "transparent",
+                border: isActive
+                  ? "1px solid rgba(255,255,255,0.14)"
+                  : "1px solid transparent",
+                padding: "10px 12px",
+                borderRadius: "10px",
+                fontWeight: isActive ? 700 : 500,
+                fontSize: level === 0 ? "15px" : "14px",
+                marginLeft: `${level * 10}px`,
+                transition: "all 0.2s ease",
+                //transition: "all 0.25s ease",
+                
+              }}
+            >
+              {Icon && <Icon size={16} />}
+              {!collapsed && <span>{item.title}</span>}
+            </Link>
+          </li>
+        )
+      }
+
+      return (
+        <li key={key} style={{ marginBottom: "6px" }}>
+          <button
+            onClick={() => toggleMenu(key)}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              background: isParentActive ? "rgba(255,255,255,0.10)" : "transparent",
+              border: isParentActive
+                ? "1px solid rgba(255,255,255,0.14)"
+                : "1px solid transparent",
+              color: "#ffffff",
+              padding: "10px 12px",
+              borderRadius: "10px",
+              cursor: "pointer",
+              fontWeight: isParentActive ? 700 : 500,
+              fontSize: level === 0 ? "15px" : "14px",
+              marginLeft: `${level * 10}px`,
+              transition: "all 0.2s ease"
+            }}
+          >
+            {Icon && <Icon size={16} />}
+            {!collapsed && (
+              <>
+                <span style={{ flex: 1, textAlign: "left" }}>{item.title}</span>
+                {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+              </>
+            )}
+          </button>
+
+          {!collapsed && isOpen && (
+            <ul
+              style={{
+                listStyle: "none",
+                margin: "6px 0 0 0",
+                padding: 0
+              }}
+            >
+              {renderMenuItems(item.submenu, level + 1, `${key}-`)}
+            </ul>
+          )}
+        </li>
+      )
+    })
+  }
 
   return (
     <aside
@@ -63,7 +127,10 @@ function Sidebar() {
         height: "100vh",
         position: "sticky",
         top: 0,
-        background: "linear-gradient(180deg, #0b2a4a 0%, #123b62 100%)",
+        //background: "linear-gradient(180deg, #0b2a4a 0%, #123b62 100%)",
+        //background: "linear-gradient(180deg, #1E4E96 0%, #2E63B0 100%)",
+        //background: "#1E4E96",
+        background: "rgb(26, 75, 148)",
         color: "white",
         display: "flex",
         flexDirection: "column",
@@ -134,89 +201,7 @@ function Sidebar() {
         }}
       >
         <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
-          {menuConfig.map((item) => {
-            const Icon = item.icon
-            const hasSubmenu = !!item.submenu
-            const isParentActive = activeParents[item.title]
-
-            if (!hasSubmenu) {
-              const active = activePath === item.path
-              return (
-                <li key={item.title} style={{ marginBottom: "8px" }}>
-                  <Link to={item.path} style={itemStyle(active)}>
-                    <Icon size={18} />
-                    {!collapsed && <span>{item.title}</span>}
-                  </Link>
-                </li>
-              )
-            }
-
-            const isOpen = openMenus[item.title] || isParentActive
-
-            return (
-              <li key={item.title} style={{ marginBottom: "8px" }}>
-                <button
-                  onClick={() => toggleMenu(item.title)}
-                  style={{
-                    width: "100%",
-                    ...itemStyle(isParentActive || openMenus[item.title]),
-                    border: (isParentActive || openMenus[item.title])
-                      ? "1px solid rgba(255,255,255,0.14)"
-                      : "1px solid transparent",
-                    cursor: "pointer"
-                  }}
-                >
-                  <Icon size={18} />
-                  {!collapsed && (
-                    <>
-                      <span style={{ flex: 1, textAlign: "left" }}>{item.title}</span>
-                      {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                    </>
-                  )}
-                </button>
-
-                {!collapsed && isOpen && (
-                  <ul
-                    style={{
-                      listStyle: "none",
-                      margin: "8px 0 0 0",
-                      padding: "0 0 0 10px",
-                      borderLeft: "1px solid rgba(255,255,255,0.10)"
-                    }}
-                  >
-                    {item.submenu.map((sub) => {
-                      const SubIcon = sub.icon
-                      const active = activePath === sub.path
-
-                      return (
-                        <li key={sub.title} style={{ marginBottom: "6px", marginLeft: "8px" }}>
-                          <Link
-                            to={sub.path}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "10px",
-                              textDecoration: "none",
-                              color: active ? "#ffffff" : "#c9d9e8",
-                              background: active ? "rgba(255,255,255,0.14)" : "transparent",
-                              padding: "10px 12px",
-                              borderRadius: "10px",
-                              fontSize: "14px",
-                              fontWeight: active ? 700 : 500,
-                              transition: "all 0.2s ease"
-                            }}
-                          >
-                            <SubIcon size={16} />
-                            <span>{sub.title}</span>
-                          </Link>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                )}
-              </li>
-            )
-          })}
+          {renderMenuItems(menuConfig)}
         </ul>
       </div>
 
